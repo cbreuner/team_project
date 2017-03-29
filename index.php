@@ -106,8 +106,63 @@ function display() {
 		
 		
 	} else {
-    $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
-	drawResults($sql);
+		echo '<div class="panel panel-primary"><div class="panel-heading">
+			  <h3 class="panel-title">Upcomming Sales</h3></div>
+			  <div class="panel-body">';
+        displaySales();
+		echo '</div><div class="panel-footer" style="text-align:center;"></div></div>';                					
+		$sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
+		drawResults($sql);
+	}
+}
+
+function displaySales() {
+	include 'inc/conn.php';
+	$sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id RIGHT JOIN tp_sales sa ON s.id = sa.product_id";
+	$result = $conn->query($sql);      
+	$rows = $result->num_rows;    // Find total rows returned by database
+		if($rows > 0) {
+			$cols = 3;    // Define number of columns
+			$counter = 1;     // Counter used to identify if we need to start or end a row
+			$nbsp = $cols - ($rows % $cols);    // Calculate the number of blank columns
+			
+			$container_class = 'container-fluid';  // Parent container class name
+			$row_class = 'row';    // Row class name
+			$col_class = 'col-sm-4'; // Column class name
+	 
+			echo '<div class="'.$container_class.'">';    // Container open
+		while ($item = $result->fetch_array()) {
+			if(($counter % $cols) == 1) {    // Check if it's new row
+				echo '<div class="'.$row_class.'">';	// Start a new row
+			}
+					$id = $item['id'];
+					$name = $item['name'];
+					$price = $item['price'];
+					$img = $item['image'];
+					$date = $item['start_date'];
+					echo '<div class="'.$col_class.'"><div class="thumbnail">';
+					echo '<img src="'.$img.'">';
+					echo '<h4>';
+					echo '<s>'.$price.'</s><br>';
+					$price = $item['sale_price'];
+					echo '<div style="color:red;">'.$price.'<br>Sale!</div>';
+					echo '</h4>';
+					echo '<h4>'.$name.'</h4>';
+					echo '<div style="font-weight:bold;color:red;">Sale Begins '.$date.'</div>';
+					echo '</div></div>';     
+			if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
+				echo '</div>';	 //  Close the row
+			}
+			$counter++;    // Increase the counter
+		}
+		$result->free();
+		if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
+			for ($i = 0; $i < $nbsp; $i++)	{ 
+				echo '<div class="'.$col_class.'">&nbsp;</div>';		
+			}
+			echo '</div>';  // Close the row
+		}
+		echo '</div>';  // Close the container
 	}
 }
 
@@ -171,6 +226,7 @@ function display() {
         <div class="row">
 
             <div class="col-md-3">
+			
                 <p class="lead">Advanced Search</p>
                 <div class="list-group">
 				<form action="index.php" method="post">
@@ -211,7 +267,7 @@ function display() {
 				</form>
                 </div>
 				
-			<div class="panel panel-primary">
+			<div class="panel panel-info text-center">
 				<div class="panel-heading">
 					<h3 class="panel-title">
 						View Your Shopping Cart
@@ -270,14 +326,14 @@ function display() {
                         </div>
                     </div>
 
-                </div>
-
+                </div>	
 
 
 
 
                     
 				<?php
+				
 					echo "<div id='storeDisplay'>";
                     display();
 					echo "</div>";
@@ -300,7 +356,7 @@ function display() {
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; CSUMB</p>
                 </div>
             </div>
         </footer>

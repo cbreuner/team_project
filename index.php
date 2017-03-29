@@ -1,7 +1,34 @@
 <?php
 include 'inc/sessions.php';
-
 function display() {
+	if (isset($_POST["DetailId"]) && !empty($_POST["DetailId"])) {
+		$itemId=$_POST["DetailId"];
+			$fetchId = $itemId;
+			include 'inc/conn.php';
+			$sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id WHERE s.id = '$fetchId'";
+			$result = $conn->query($sql);
+			while ($item = $result->fetch_array()) {
+				$id = $item['id'];
+				$name = $item['name'];
+				$price = $item['price'];
+				$imgUrl = $item['img_url'];
+				$img = "http://localhost/team_project/img/games/".$imgUrl;
+				$desc = $item['description'];
+				echo '<div class="col-md-12"><div class="well"><table style="width:100%;"><tr><td >';
+				echo '<img src="'.$img.'" style="max-width:300px;"></td><td>';
+				echo '<h4 class="pull-right">'.$price.'</h4>';
+				echo '<h4><a href="#">'.$name.'</a></h4>';
+				echo '<p>'.$desc.'</p>';
+				echo '<form action="index.php" method="post">';
+				echo '<p><input type="hidden" value="'.$id.'" name="itemId">
+						<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
+						<input type="hidden" value="'.$name.'" name="itemName">
+						<input type="hidden" value="'.$price.'" name="itemPrice">
+						<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
+						</form>
+						</p></td></tr></table></div></div>';  	
+			}
+	} else {
     include 'inc/conn.php';
     $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
     $result = $conn->query($sql);      
@@ -29,7 +56,9 @@ function display() {
 						echo '<img src="'.$img.'">';
 						echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
 						echo '<h4><a href="#">'.$name.'</a></h4>';
-						echo ' <p>'.$item['description'].'</p>';
+						echo '<form action="index.php" method="post">';
+						echo '<input type="hidden" value="'.$id.'" name="DetailId">';
+						echo '<input type="submit" value="View Details" class="changeButton btn btn-info btn-large"></form>';
 						echo '<form action="index.php" method="post">';
 						echo '<p><input type="hidden" value="'.$id.'" name="itemId">
 								<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
@@ -53,6 +82,8 @@ function display() {
 			echo '</div>';  // Close the container
 		}
 	}
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -185,7 +216,9 @@ function display() {
 
                     
 				<?php
+					echo "<div id='storeDisplay'>";
                     display();
+					echo "</div>";
                 ?>
 
          
@@ -212,7 +245,20 @@ function display() {
 
     </div>
     <!-- /.container -->
+<script>
+$(document).ready(function(){
+    $('.button').click(function(){
+        var clickBtnValue = $(this).val();
+        var ajaxurl = 'ajax.php',
+        data =  {'action': clickBtnValue};
+        $.post(ajaxurl, data, function (response) {
+            // Response div goes here.
+            alert("action performed successfully");
+        });
+    });
 
+})
+</script>
 	<!-- Shopping Cart JS -->
     <script src="js/cart.js"></script>
 	

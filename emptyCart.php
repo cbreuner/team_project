@@ -58,38 +58,11 @@ session_destroy();
 
         <div class="row">
 
-            <div class="col-md-3">
-                <p class="lead">Awesome Sauce Store</p>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
-                </div>
-				
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title">
-						View Your Shopping Cart
-					</h3>
-				</div>
-				<div class="panel-body">
-					
-				<div id="shoppingCartDiv">  
 
-				</div>
-  
-				</div>
-				<div class="panel-footer" style="text-align:center;">
-					<div id="shoppingCartTotalPrice" style="font-size:20px;color:blue;">
-
-					</div>
-				</div>
-			</div>
-        </div>
 			
 			
 
-            <div class="col-md-9">
+            <div class="col-md-12">
 
                 <div class="row carousel-holder">
 

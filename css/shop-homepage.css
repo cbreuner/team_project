@@ -22,8 +22,7 @@ body {
 }
 
 .caption {
-    height: 130px;
-    overflow: hidden;
+   
 }
 
 .caption h4 {
@@ -31,7 +30,7 @@ body {
 }
 
 .thumbnail img {
-    width: 100%;
+    width: 80%;
 }
 
 .ratings {
@@ -41,12 +40,12 @@ body {
 }
 
 .thumbnail {
-    padding: 0;
+    padding: 10px;
 }
 
 .thumbnail .caption-full {
-    padding: 9px;
     color: #333;
+
 }
 
 footer {

@@ -1,37 +1,9 @@
 <?php
 include 'inc/sessions.php';
-function display() {
-	if (isset($_POST["DetailId"]) && !empty($_POST["DetailId"])) {
-		$itemId=$_POST["DetailId"];
-			$fetchId = $itemId;
-			include 'inc/conn.php';
-			$sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id WHERE s.id = '$fetchId'";
-			$result = $conn->query($sql);
-			while ($item = $result->fetch_array()) {
-				$id = $item['id'];
-				$name = $item['name'];
-				$price = $item['price'];
-				$imgUrl = $item['img_url'];
-				$img = "http://localhost/team_project/img/games/".$imgUrl;
-				$desc = $item['description'];
-				echo '<div class="col-md-12"><div class="well"><table style="width:100%;"><tr><td >';
-				echo '<img src="'.$img.'" style="max-width:300px;"></td><td>';
-				echo '<h4 class="pull-right">'.$price.'</h4>';
-				echo '<h4>'.$name.'</h4>';
-				echo '<p>'.$desc.'</p>';
-				echo '<form action="index.php" method="post">';
-				echo '<p><input type="hidden" value="'.$id.'" name="itemId">
-						<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
-						<input type="hidden" value="'.$name.'" name="itemName">
-						<input type="hidden" value="'.$price.'" name="itemPrice">
-						<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
-						</form>
-						</p></td></tr></table></div></div>';  	
-			}
-	} else {
-    include 'inc/conn.php';
-    $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
-    $result = $conn->query($sql);      
+
+function drawResults($sql) {
+	include 'inc/conn.php';
+	$result = $conn->query($sql);      
 	$rows = $result->num_rows;    // Find total rows returned by database
 		if($rows > 0) {
 			$cols = 3;    // Define number of columns
@@ -43,44 +15,101 @@ function display() {
 			$col_class = 'col-sm-4'; // Column class name
 	 
 			echo '<div class="'.$container_class.'">';    // Container open
-			while ($item = $result->fetch_array()) {
-				if(($counter % $cols) == 1) {    // Check if it's new row
-					echo '<div class="'.$row_class.'">';	// Start a new row
-				}
-						$id = $item['id'];
-						$name = $item['name'];
-						$price = $item['price'];
-						$imgUrl = $item['img_url'];
-						$img = "http://localhost/team_project/img/games/".$imgUrl;
-						echo '<div class="'.$col_class.'"><div class="thumbnail">';
-						echo '<img src="'.$img.'">';
-						echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
-						echo '<h4>'.$name.'</h4>';
-						echo '<form action="index.php" method="post">';
-						echo '<input type="hidden" value="'.$id.'" name="DetailId">';
-						echo '<input type="submit" value="View Details" class="changeButton btn btn-info btn-large"></form>';
-						echo '<form action="index.php" method="post">';
-						echo '<p><input type="hidden" value="'.$id.'" name="itemId">
-								<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
-								<input type="hidden" value="'.$name.'" name="itemName">
-								<input type="hidden" value="'.$price.'" name="itemPrice">
-								<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
-								</form>
-								</p></div></div></div>';     
-				if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
-					echo '</div>';	 //  Close the row
-				}
-				$counter++;    // Increase the counter
+		while ($item = $result->fetch_array()) {
+			if(($counter % $cols) == 1) {    // Check if it's new row
+				echo '<div class="'.$row_class.'">';	// Start a new row
 			}
-			$result->free();
-			if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
-				for ($i = 0; $i < $nbsp; $i++)	{ 
-					echo '<div class="'.$col_class.'">&nbsp;</div>';		
-				}
-				echo '</div>';  // Close the row
+					$id = $item['id'];
+					$name = $item['name'];
+					$price = $item['price'];
+					$img = $item['image'];
+					echo '<div class="'.$col_class.'"><div class="thumbnail">';
+					echo '<img src="'.$img.'">';
+					echo '<div class="caption"><h4>'.$price.'</h4>';
+					echo '<h4>'.$name.'</h4>';
+					echo '<form action="index.php" method="post">';
+					echo '<input type="hidden" value="'.$id.'" name="DetailId">';
+					echo '<input type="submit" value="View Details" class="changeButton btn btn-info btn-large"></form>';
+					echo '<form action="index.php" method="post">';
+					echo '<input type="hidden" value="'.$id.'" name="itemId">
+							<input type="hidden" value="'.$img.'" name="itemImgUrl">
+							<input type="hidden" value="'.$name.'" name="itemName">
+							<input type="hidden" value="'.$price.'" name="itemPrice">
+							<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
+							</form>
+							</div></div></div>';     
+			if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
+				echo '</div>';	 //  Close the row
 			}
-			echo '</div>';  // Close the container
+			$counter++;    // Increase the counter
 		}
+		$result->free();
+		if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
+			for ($i = 0; $i < $nbsp; $i++)	{ 
+				echo '<div class="'.$col_class.'">&nbsp;</div>';		
+			}
+			echo '</div>';  // Close the row
+		}
+		echo '</div>';  // Close the container
+	}
+}
+function display() {
+	if (isset($_POST["DetailId"]) && !empty($_POST["DetailId"])) {
+		$itemId=$_POST["DetailId"];
+			$fetchId = $itemId;
+			include 'inc/conn.php';
+			$sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id WHERE s.id = '$fetchId'";
+			$result = $conn->query($sql);
+			while ($item = $result->fetch_array()) {
+				$id = $item['id'];
+				$name = $item['name'];
+				$price = $item['price'];
+				$img = $item['image'];
+				$desc = $item['description'];
+				echo '<div class="col-md-12">';
+				echo '<p class="text-center"><a href="index.php">Return To The Store</a></p>';
+				echo '<div class="well"><table style="width:100%;"><tr><td >';
+				echo '<img src="'.$img.'" style="max-width:300px;"></td><td>';
+				echo '<h4 class="pull-right">'.$price.'</h4>';
+				echo '<h4>'.$name.'</h4>';
+				echo '<p>'.$desc.'</p>';
+				echo '<form action="index.php" method="post">';
+				echo '<p><input type="hidden" value="'.$id.'" name="itemId">
+						<input type="hidden" value="'.$img.'" name="itemImgUrl">
+						<input type="hidden" value="'.$name.'" name="itemName">
+						<input type="hidden" value="'.$price.'" name="itemPrice">
+						<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
+						</form>
+						</p></td></tr></table></div></div>';  	
+			}
+	} elseif (isset($_POST["search"]) && !empty($_POST["search"])) {
+		$platform=$_POST["platform"];	
+		$category=$_POST["category"];		
+		$order_one=$_POST["order_one"];
+		$order_two=$_POST["order_two"];
+
+		include 'inc/conn.php';
+		$curSql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id ";
+		$categorySQL = "WHERE category = '$category' ";
+		$andWhere = "AND ";
+		$orderBy = "ORDER BY ";
+		$sql = $curSql.$categorySQL."AND ".$platform."=1 ORDER BY ".$order_one." ".$order_two;
+		if ($order_two=="DESC") {
+			$label = "High to Low";
+		} else {
+			$label = "Low to High";
+		}
+		echo '<p class="text-center"><a href="index.php">Return To The Store</a></p>';
+		echo '<div><h3>Search Results</h3>
+		<p><strong>Your Filters: </strong><br>Platform: '.$platform.'
+		<br>Category: '.$category.'<br>Sorting By: '.$order_one.' '.$label.'	
+		</p></div>';
+		drawResults($sql);
+		
+		
+	} else {
+    $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
+	drawResults($sql);
 	}
 }
 
@@ -126,7 +155,8 @@ function display() {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Awesome Sauce Games</a>
+                <a class="navbar-brand" href="index.php">Awesome Sauce Games</a>
+				
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -145,34 +175,41 @@ function display() {
             <div class="col-md-3">
                 <p class="lead">Advanced Search</p>
                 <div class="list-group">
+				<form action="index.php" method="post">
 					<div class="list-group-item">
 					<strong>Category:</strong> <br>
-						<select name="type">
-						  <option value="action">action</option>
-						  <option value="rpg">rpg</option>
-						  <option value="simulation">simulation</option>
-						  <option value="strategy">strategy</option>
+						<select name="category" required>
+						  <option value="action">Action</option>
+						  <option value="rpg">RPG</option>
+						  <option value="mmorpg">MMORPG</option>						  
+						  <option value="simulator">Simulator</option>
+						  <option value="sports">Sports</option>
+						  <option value="tps">TPS</option>
+						  <option value="fps">FPS</option>
+						  <option value="rts">RTS</option>							  
 						</select>
 					</div>
 					<div class="list-group-item">
 						<strong>Platforms:</strong> <br>
-						PS4: <input type="checkbox" name="ps4">
-						PC: <input type="checkbox" name="pc">
-						XBOX: <input type="checkbox" name="xbox">
-					</div>
-					<div class="list-group-item">
-						On Sale: <input type="checkbox" name="sale">
+						PS4: <input type="radio" value="ps4" name="platform" required>
+						PC: <input type="radio" value="pc" name="platform">
+						XBOX: <input type="radio" value="xbox" name="platform">
 					</div>
 					<div class="list-group-item">
 						<strong>Order By:</strong> <br>
-						Name: <input type="radio" name="order_one">
-						Price: <input type="radio" name="order_one">
+						Name: <input type="radio" name="order_one" value="name" required>
+						Price: <input type="radio" name="order_one" value="price">
 					</div>
 					<div class="list-group-item">
 						<strong>Show Results:</strong> <br>
-						Ascending: <input type="radio" name="order_two">
-						Descending: <input type="radio" name="order_two">
+						Ascending: <input type="radio" name="order_two" value="ASC" required>
+						Descending: <input type="radio" name="order_two" value="DESC">
 					</div>
+					<div class="list-group-item text-center">
+						<input type="hidden" value="search" name="search">
+						<input type="submit" value="Search" class="btn btn-md btn-info">
+					</div>
+				</form>
                 </div>
 				
 			<div class="panel panel-primary">
@@ -271,8 +308,6 @@ function display() {
 
     </div>
     <!-- /.container -->
-	<!-- Shopping Cart JS -->
-    <script src="js/cart.js"></script>
 	
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

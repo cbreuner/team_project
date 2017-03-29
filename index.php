@@ -1,57 +1,61 @@
 <?php
-$_SESSION['cart']=isset($_SESSION['cart']) ? $_SESSION['cart'] : array();
-session_start();
+include 'inc/sessions.php';
+
+
 
 
 function display() {
     include 'inc/conn.php';
     $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
-    $result = $conn->query($sql);
-    
-
-    
-$rows = $result->num_rows;    // Find total rows returned by database
-	if($rows > 0) {
-		$cols = 3;    // Define number of columns
-		$counter = 1;     // Counter used to identify if we need to start or end a row
-		$nbsp = $cols - ($rows % $cols);    // Calculate the number of blank columns
-		
-		$container_class = 'container-fluid';  // Parent container class name
-		$row_class = 'row';    // Row class name
-		$col_class = 'col-sm-4'; // Column class name
- 
-        echo '<div class="'.$container_class.'">';    // Container open
-		while ($item = $result->fetch_array()) {
-			if(($counter % $cols) == 1) {    // Check if it's new row
-				echo '<div class="'.$row_class.'">';	// Start a new row
+    $result = $conn->query($sql);      
+	$rows = $result->num_rows;    // Find total rows returned by database
+		if($rows > 0) {
+			$cols = 3;    // Define number of columns
+			$counter = 1;     // Counter used to identify if we need to start or end a row
+			$nbsp = $cols - ($rows % $cols);    // Calculate the number of blank columns
+			
+			$container_class = 'container-fluid';  // Parent container class name
+			$row_class = 'row';    // Row class name
+			$col_class = 'col-sm-4'; // Column class name
+	 
+			echo '<div class="'.$container_class.'">';    // Container open
+			while ($item = $result->fetch_array()) {
+				if(($counter % $cols) == 1) {    // Check if it's new row
+					echo '<div class="'.$row_class.'">';	// Start a new row
+				}
+						$id = $item['id'];
+						$name = $item['name'];
+						$price = $item['price'];
+						$imgUrl = $item['img_url'];
+						$img = "http://localhost/team_project/img/games/".$imgUrl;
+						echo '<div class="'.$col_class.'"><div class="thumbnail">';
+						echo '<img src="'.$img.'">';
+						echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
+						echo '<h4><a href="#">'.$name.'</a></h4>';
+						echo ' <p>'.$item['description'].'</p>';
+						echo '<form action="index.php" method="post">';
+						echo '<p><input type="hidden" value="'.$id.'" name="itemId">
+								<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
+								<input type="hidden" value="'.$name.'" name="itemName">
+								<input type="hidden" value="'.$price.'" name="itemPrice">
+								<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large" style="display:block;" >							
+								</form>
+								</p></div></div></div>';     
+				if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
+					echo '</div>';	 //  Close the row
+				}
+				$counter++;    // Increase the counter
 			}
-					$id = $item['id'];
-					$price = $item['price'];
-                   	$img = "http://localhost/team_project/img/games/".$item['img_url'];
-					echo '<div class="'.$col_class.'"><div class="thumbnail">';
-					echo '<img src="'.$img.'">';
-					echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
-					echo '<h4><a href="#">'.$item['name'].'</a></h4>';
-					echo ' <p>'.$item['description'].'</p>';
-					echo '<p><a class="changeButton btn btn-primary btn-large" href="#" onclick="addCart(' . $id . ',' . $price . ')" style="display:block;" >Add to Cart</a>
-			</p></div></div></div>';     
-			if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
-				echo '</div>';	 //  Close the row
+			$result->free();
+			if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
+				for ($i = 0; $i < $nbsp; $i++)	{ 
+					echo '<div class="'.$col_class.'">&nbsp;</div>';		
+				}
+				echo '</div>';  // Close the row
 			}
-			$counter++;    // Increase the counter
+			echo '</div>';  // Close the container
 		}
-		$result->free();
-		if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
-			for ($i = 0; $i < $nbsp; $i++)	{ 
-				echo '<div class="'.$col_class.'">&nbsp;</div>';		
-			}
-			echo '</div>';  // Close the row
-		}
-        echo '</div>';  // Close the container
 	}
-}
-
- 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,11 +136,12 @@ $rows = $result->num_rows;    // Find total rows returned by database
 				<div class="panel-heading">
 					<h3 class="panel-title">
 						View Your Shopping Cart
-						
 					</h3>
 				</div>
-				<div class="panel-body">				
-	  
+				<div class="panel-body">
+<?php				
+include 'inc/shoppingCart.php';
+?>
 				<div id="shoppingCartDiv">  
 
 				</div>

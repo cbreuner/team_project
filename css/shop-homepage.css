@@ -52,3 +52,8 @@ body {
 footer {
     margin: 50px 0;
 }
+
+.cartImg {
+	max-width:60px;
+	padding-bottom:15px;
+}

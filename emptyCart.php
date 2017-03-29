@@ -1,58 +1,6 @@
 <?php
 include 'inc/sessions.php';
-
-function display() {
-    include 'inc/conn.php';
-    $sql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id";
-    $result = $conn->query($sql);      
-	$rows = $result->num_rows;    // Find total rows returned by database
-		if($rows > 0) {
-			$cols = 3;    // Define number of columns
-			$counter = 1;     // Counter used to identify if we need to start or end a row
-			$nbsp = $cols - ($rows % $cols);    // Calculate the number of blank columns
-			
-			$container_class = 'container-fluid';  // Parent container class name
-			$row_class = 'row';    // Row class name
-			$col_class = 'col-sm-4'; // Column class name
-	 
-			echo '<div class="'.$container_class.'">';    // Container open
-			while ($item = $result->fetch_array()) {
-				if(($counter % $cols) == 1) {    // Check if it's new row
-					echo '<div class="'.$row_class.'">';	// Start a new row
-				}
-						$id = $item['id'];
-						$name = $item['name'];
-						$price = $item['price'];
-						$imgUrl = $item['img_url'];
-						$img = "http://localhost/team_project/img/games/".$imgUrl;
-						echo '<div class="'.$col_class.'"><div class="thumbnail">';
-						echo '<img src="'.$img.'">';
-						echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
-						echo '<h4><a href="#">'.$name.'</a></h4>';
-						echo ' <p>'.$item['description'].'</p>';
-						echo '<form action="index.php" method="post">';
-						echo '<p><input type="hidden" value="'.$id.'" name="itemId">
-								<input type="hidden" value="'.$imgUrl.'" name="itemImgUrl">
-								<input type="hidden" value="'.$name.'" name="itemName">
-								<input type="hidden" value="'.$price.'" name="itemPrice">
-								<input type="submit" value="Add To Cart" class="changeButton btn btn-primary btn-large">							
-								</form>
-								</p></div></div></div>';     
-				if(($counter % $cols) == 0) { // If it's last column in each row then counter remainder will be zero
-					echo '</div>';	 //  Close the row
-				}
-				$counter++;    // Increase the counter
-			}
-			$result->free();
-			if($nbsp > 0) { // Adjustment to add unused column in last row if they exist
-				for ($i = 0; $i < $nbsp; $i++)	{ 
-					echo '<div class="'.$col_class.'">&nbsp;</div>';		
-				}
-				echo '</div>';  // Close the row
-			}
-			echo '</div>';  // Close the container
-		}
-	}
+session_destroy();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,7 +47,6 @@ function display() {
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -126,19 +73,15 @@ function display() {
 					</h3>
 				</div>
 				<div class="panel-body">
-
+					
 				<div id="shoppingCartDiv">  
-					<?php				
-					include 'inc/shoppingCart.php';
-					?>
+
 				</div>
-	
+  
 				</div>
 				<div class="panel-footer" style="text-align:center;">
 					<div id="shoppingCartTotalPrice" style="font-size:20px;color:blue;">
-					<br>
-					<a href="emptyCart.php" class="btn btn-info">Empty Cart</a>
-					<a href="#" class="btn btn-success">Checkout</a>
+
 					</div>
 				</div>
 			</div>
@@ -181,12 +124,10 @@ function display() {
 
 
 
-
-
-                    
-				<?php
-                    display();
-                ?>
+				  <div class="jumbotron">
+    <h2>Cart Emptied</h2>      
+    <p><a href="index.php">Return to the Store</a></p>
+  </div>
 
          
 

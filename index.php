@@ -17,7 +17,7 @@ function display() {
 				echo '<div class="col-md-12"><div class="well"><table style="width:100%;"><tr><td >';
 				echo '<img src="'.$img.'" style="max-width:300px;"></td><td>';
 				echo '<h4 class="pull-right">'.$price.'</h4>';
-				echo '<h4><a href="#">'.$name.'</a></h4>';
+				echo '<h4>'.$name.'</h4>';
 				echo '<p>'.$desc.'</p>';
 				echo '<form action="index.php" method="post">';
 				echo '<p><input type="hidden" value="'.$id.'" name="itemId">
@@ -55,7 +55,7 @@ function display() {
 						echo '<div class="'.$col_class.'"><div class="thumbnail">';
 						echo '<img src="'.$img.'">';
 						echo '<div class="caption"><h4 class="pull-right">'.$price.'</h4>';
-						echo '<h4><a href="#">'.$name.'</a></h4>';
+						echo '<h4>'.$name.'</h4>';
 						echo '<form action="index.php" method="post">';
 						echo '<input type="hidden" value="'.$id.'" name="DetailId">';
 						echo '<input type="submit" value="View Details" class="changeButton btn btn-info btn-large"></form>';
@@ -143,11 +143,31 @@ function display() {
         <div class="row">
 
             <div class="col-md-3">
-                <p class="lead">Awesome Sauce Store</p>
+                <p class="lead">Advanced Search</p>
                 <div class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
+					<div class="list-group-item">
+					<strong>Category:</strong> <br>
+						<select name="type">
+						  <option value="action">action</option>
+						  <option value="rpg">rpg</option>
+						  <option value="simulation">simulation</option>
+						  <option value="strategy">strategy</option>
+						</select>
+					</div>
+					<div class="list-group-item">
+						<strong>Platforms:</strong> <br>
+						PS4: <input type="checkbox" name="ps4">
+						PC: <input type="checkbox" name="pc">
+						XBOX: <input type="checkbox" name="xbox">
+					</div>
+					<div class="list-group-item">
+						On Sale: <input type="checkbox" name="sale">
+					</div>
+					<div class="list-group-item">
+						<strong>Order:</strong> <br>
+						Ascending: <input type="radio" name="order">
+						Descending: <input type="radio" name="order">
+					</div>
                 </div>
 				
 			<div class="panel panel-primary">

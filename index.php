@@ -69,7 +69,7 @@ function display() {
 				echo '<div class="col-md-12">';
 				echo '<p class="text-center"><a href="index.php">Return To The Store</a></p>';
 				echo '<div class="well"><table style="width:100%;"><tr><td >';
-				echo '<img src="'.$img.'" style="max-width:300px;"></td><td>';
+				echo '<img src="'.$img.'" style="max-width:300px;padding:15px;"></td><td>';
 				echo '<h4 class="pull-right">'.$price.'</h4>';
 				echo '<h4>'.$name.'</h4>';
 				echo '<p>'.$desc.'</p>';
@@ -91,13 +91,11 @@ function display() {
 		include 'inc/conn.php';
 		$curSql = "SELECT * FROM tp_stock s INNER JOIN tp_price p ON s.id = p.product_id ";
 		$categorySQL = "WHERE category = '$category' ";
-		$andWhere = "AND ";
-		$orderBy = "ORDER BY ";
 		$sql = $curSql.$categorySQL."AND ".$platform."=1 ORDER BY ".$order_one." ".$order_two;
 		if ($order_two=="DESC") {
-			$label = "High to Low";
+			$label = "High to Low (DESC)";
 		} else {
-			$label = "Low to High";
+			$label = "Low to High (ASC)";
 		}
 		echo '<p class="text-center"><a href="index.php">Return To The Store</a></p>';
 		echo '<div><h3>Search Results</h3>
@@ -122,10 +120,10 @@ function display() {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Store">
+    <meta name="author" content="Chris Breuner">
 
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title>Team Project</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -179,6 +177,7 @@ function display() {
 					<div class="list-group-item">
 					<strong>Category:</strong> <br>
 						<select name="category" required>
+						  <option value=""></option>
 						  <option value="action">Action</option>
 						  <option value="rpg">RPG</option>
 						  <option value="mmorpg">MMORPG</option>						  

@@ -164,9 +164,14 @@ function display() {
 						On Sale: <input type="checkbox" name="sale">
 					</div>
 					<div class="list-group-item">
-						<strong>Order:</strong> <br>
-						Ascending: <input type="radio" name="order">
-						Descending: <input type="radio" name="order">
+						<strong>Order By:</strong> <br>
+						Name: <input type="radio" name="order_one">
+						Price: <input type="radio" name="order_one">
+					</div>
+					<div class="list-group-item">
+						<strong>Show Results:</strong> <br>
+						Ascending: <input type="radio" name="order_two">
+						Descending: <input type="radio" name="order_two">
 					</div>
                 </div>
 				
@@ -186,6 +191,7 @@ function display() {
 	
 				</div>
 				<div class="panel-footer" style="text-align:center;">
+					<h3>Cart Total: $<?php echo $total; ?></h3>
 					<div id="shoppingCartTotalPrice" style="font-size:20px;color:blue;">
 					<br>
 					<a href="emptyCart.php" class="btn btn-info">Empty Cart</a>
@@ -265,20 +271,6 @@ function display() {
 
     </div>
     <!-- /.container -->
-<script>
-$(document).ready(function(){
-    $('.button').click(function(){
-        var clickBtnValue = $(this).val();
-        var ajaxurl = 'ajax.php',
-        data =  {'action': clickBtnValue};
-        $.post(ajaxurl, data, function (response) {
-            // Response div goes here.
-            alert("action performed successfully");
-        });
-    });
-
-})
-</script>
 	<!-- Shopping Cart JS -->
     <script src="js/cart.js"></script>
 	

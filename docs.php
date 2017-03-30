@@ -1,6 +1,5 @@
 <?php
 include 'inc/sessions.php';
-session_destroy();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +43,7 @@ session_destroy();
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.php">Awesome Sauce Games</a>
-				 <a class="navbar-brand" href="docs.php">MockUp/Schema</a>
+                <a class="navbar-brand" href="docs.php">MockUp/Schema</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -99,10 +98,19 @@ session_destroy();
 
 
 				  <div class="jumbotron">
-    <h2>Cart Emptied</h2>      
+       
     <p><a href="index.php">Return to the Store</a></p>
   </div>
-
+<h1>Mock Up</h1>
+<img src="img/mockup.jpg">
+<br><br>
+<h1>DB Schema</h1>
+<img src="img/dbschema.jpg">
+<br><br>
+<h1>User Story</h1>
+<p>
+    The User will be able to go to our website, and see a list of video games that are being offered. The website will display the games that are currently in stock and a list of upcoming sales that will be offered. Items can be viewed singularly within greater detail if someone wants to know more about the game. Games can be added to a shopping cart for purchase. The shopping cart can also be emptied. When viewing the shopping cart you can see the game selected and the price of said game. The cart also displays the total price(s) of the games in the cart. The user is able to select games by categories and getting the right results based on the categories selected. The categories that are able to be searched include game genres and platforms. The user is able to order these results in ascending or descending order, by name or price. 
+</p>
          
 
             </div>
